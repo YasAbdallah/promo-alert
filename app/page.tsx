@@ -22,6 +22,7 @@ export default function Home() {
       }catch{
        setError(true); 
       }finally{
+        console.log(products)
         setLoading(false);
       }
     }
@@ -42,7 +43,7 @@ export default function Home() {
   if(error){
     return (
       <ProductListLayout>
-        <p>Erro ao carregar produtos. Tente novamente.</p>;
+        <p>Erro ao carregar produtos. Tente novamente.</p>
       </ProductListLayout>
     );
   }

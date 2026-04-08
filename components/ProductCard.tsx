@@ -22,7 +22,7 @@ export default function ProductCard({product}: Props) {
         <>
         <Card className="relative mx-auto w-full max-w-sm pt-0">
             <Image
-                src={product.image}
+                src={product.images[0]}
                 alt={product.title}
                 width={400}
                 height={300}
