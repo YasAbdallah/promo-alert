@@ -6,6 +6,8 @@ import ProductCard from "@/components/ProductCard";
 import { Product } from "@/types/Product";
 import LoadingCard from "@/components/LoadingCard";
 import ProductListLayout from "@/components/ProductLayout";
+import { useFavoritesStore } from "@/store/useFavoriteStore";
+import FavoriteCount from "@/components/FavoriteCount";
 
 
 export default function Home() {
@@ -13,6 +15,8 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  const favoritesCount = useFavoritesStore((state) => state.favorites.length);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -32,7 +36,7 @@ export default function Home() {
 
   if(loading){
     return (
-      <ProductListLayout>
+      <ProductListLayout title="Produtos">
         {
           Array.from({length: 8}).map((_, index) => <LoadingCard key={index}/>)
         }
@@ -42,7 +46,7 @@ export default function Home() {
 
   if(error){
     return (
-      <ProductListLayout>
+      <ProductListLayout title="Produtos">
         <p>Erro ao carregar produtos. Tente novamente.</p>
       </ProductListLayout>
     );
@@ -50,17 +54,20 @@ export default function Home() {
   
   if(products.length === 0){
     return (
-      <ProductListLayout>
+      <ProductListLayout title="Produtos">
         <p>Nenhum produto encontrado.</p>
       </ProductListLayout>
     );
   }
 
   return (
-    <ProductListLayout>
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product}/>
-      ))}
-    </ProductListLayout>
+    <>
+      <FavoriteCount/>
+      <ProductListLayout title="Produtos">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product}/>
+        ))}
+      </ProductListLayout>
+    </>
   );
 }

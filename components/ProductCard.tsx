@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Product } from "@/types/Product";
 import { useFavoritesStore } from "@/store/useFavoriteStore";
+import ButtonFavorite from "./ButtonFavorite";
 
 type Props = {
     product: Product,
@@ -33,9 +34,7 @@ export default function ProductCard({product}: Props) {
                 <CardDescription>R$ {product.price.toFixed(2)}</CardDescription>
             </CardHeader>
             <CardFooter>
-                <Button onClick={handleFavorite}>
-                    {favorite ? "Remover dos favoritos" : "Favoritar"}
-                </Button>
+                <ButtonFavorite favorite={favorite} handleFavorite={handleFavorite}/>
             </CardFooter>
         </Card>
         </>
