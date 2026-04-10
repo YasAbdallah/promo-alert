@@ -1,6 +1,6 @@
 'use client'
 
-import FavoriteCount from "@/components/FavoriteCount";
+
 import ProductCard from "@/components/ProductCard";
 import ProductListLayout from "@/components/ProductLayout";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,6 @@ export default function FavoritesPage() {
     return (
         <>
             <section className="flex items-center m-4">
-                <FavoriteCount/>
                 <Button onClick={removeAllFavorites} variant="destructive">
                     Remover Todos
                 </Button>

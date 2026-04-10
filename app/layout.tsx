@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import FavoriteCount from "@/components/FavoriteCount";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,13 +24,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const links = [
+    { href: "/", title: "Home" },
+    { href: "/favorites", title: "Favoritos", icon: <FavoriteCount /> },
+  ];
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <main>
+      <body className="min-h-screen flex flex-col">
+        <header className="w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+
+          <div className="flex w-full items-center px-4">
+            <Navbar list={links}/>
+          </div>
+
+        </header>
+
+        <main className="flex-1">
           {children}
         </main>
       </body>
