@@ -3,15 +3,16 @@
 import ButtonFavorite from "@/components/ButtonFavorite";
 import CarrouselImage from "@/components/CarrouselImage";
 import LoadingCard from "@/components/LoadingCard";
-import { getProducts } from "@/services/productService";
+import { getProductById, getProducts } from "@/services/productService";
 import { useFavoritesStore } from "@/store/useFavoriteStore";
 import { Product } from "@/types/Product";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function FavoritePage() {
-    const { id } = useParams();
-    const [product, setProduct] = useState<Product>();
+export default function ProductPage() {
+    const params = useParams<{id : string}>();
+    const id = Number(params.id);
+    const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const { addFavorite, removeFavorite, isFavorite } = useFavoritesStore();
@@ -19,9 +20,8 @@ export default function FavoritePage() {
     useEffect(() => {
         const loadProduct = async () => {
             try {
-                const data = await getProducts();
-                const foundProduct = data.find((p: Product) => p.id === Number(id));
-                setProduct(foundProduct);
+                const data = await getProductById(id);
+                setProduct(data);
             } catch {
                 setError(true);
             } finally {
@@ -34,7 +34,7 @@ export default function FavoritePage() {
     if (loading) {
         return (
             <section className="container mx-auto py-8 px-4">
-                <LoadingCard />;
+                <LoadingCard />
             </section>
         );
     }

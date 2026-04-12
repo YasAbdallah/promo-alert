@@ -6,6 +6,7 @@ import { useFavoritesStore } from "@/store/useFavoriteStore";
 import ButtonFavorite from "./ButtonFavorite";
 import CarrouselImage from "./CarrouselImage";
 import ButtonDetalhes from "./ButtonDetalhes";
+import Link from "next/link";
 
 type Props = {
     product: Product,
@@ -23,17 +24,18 @@ export default function ProductCard({product}: Props) {
     };
     return (
         <>
-        <Card className="relative mx-auto w-full max-w-sm pt-0">
-            <CarrouselImage product={product} />
-            <CardHeader>
-                <CardTitle>{product.title}</CardTitle>
-                <CardDescription>R$ {product.price.toFixed(2)}</CardDescription>
-            </CardHeader>
-            <CardFooter>
-                <ButtonFavorite favorite={favorite} handleFavorite={handleFavorite}/>
-                <ButtonDetalhes id={product.id} />
-            </CardFooter>
-        </Card>
+            <Card className="relative mx-auto w-full max-w-sm pt-0">
+                <Link href={`/products/${product.id}`} className="block hover:opacity-90 transition cursor-pointer">
+                    <CarrouselImage product={product} />
+                    <CardHeader>
+                        <CardTitle>{product.title}</CardTitle>
+                        <CardDescription>{product.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL",})}</CardDescription>
+                    </CardHeader>
+                </Link>
+                <CardFooter className="flex gap-2">
+                    <ButtonFavorite favorite={favorite} handleFavorite={handleFavorite}/>
+                </CardFooter>
+            </Card>
         </>
     );
 }
