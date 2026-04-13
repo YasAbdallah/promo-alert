@@ -13,3 +13,8 @@ export const getProductById = async (id: number) => {
     const response = await api.get(`/products/${id}`);
     return response.data;
 };
+
+export const searchProduct = async (query: string) => {
+    const response = await api.get(`/products/search?q=${query}`);
+    return response.data.products;
+};

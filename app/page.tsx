@@ -6,6 +6,7 @@ import ProductCard from "@/components/ProductCard";
 import { Product } from "@/types/Product";
 import LoadingCard from "@/components/LoadingCard";
 import ProductListLayout from "@/components/ProductLayout";
+import SearchInput from "@/components/SearchInput";
 
 
 export default function Home() {
@@ -13,6 +14,17 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const filteredProducts = products.filter(product => {
+    const term = searchTerm.toLowerCase();
+
+    return (
+      product.title.toLowerCase().includes(term) ||
+      product.description.toLowerCase().includes(term)
+    );
+  })
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -28,7 +40,6 @@ export default function Home() {
     }
     loadProducts();
   }, []);
-  console.log(products.map(p => p.title))
 
   if(loading){
     return (
@@ -58,8 +69,9 @@ export default function Home() {
 
   return (
     <>
+    <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <ProductListLayout title="Produtos">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product}/>
         ))}
       </ProductListLayout>

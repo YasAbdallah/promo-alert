@@ -3,7 +3,7 @@
 import ButtonFavorite from "@/components/ButtonFavorite";
 import CarrouselImage from "@/components/CarrouselImage";
 import LoadingCard from "@/components/LoadingCard";
-import { getProductById, getProducts } from "@/services/productService";
+import { getProductById } from "@/services/productService";
 import { useFavoritesStore } from "@/store/useFavoriteStore";
 import { Product } from "@/types/Product";
 import { useParams } from "next/navigation";
