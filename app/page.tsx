@@ -39,7 +39,7 @@ export default function Home() {
       }
     }
     loadProducts();
-  }, []);
+  }, [products]);
 
   if(loading){
     return (
