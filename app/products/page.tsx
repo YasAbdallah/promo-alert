@@ -9,7 +9,7 @@ import ProductListLayout from "@/components/product/ProductLayout";
 import SearchInput from "@/components/search/SearchInput";
 
 
-export default function Home() {
+export default function ProductsPage() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

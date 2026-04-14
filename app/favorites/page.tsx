@@ -2,7 +2,7 @@
 
 
 import ProductCard from "@/components/ProductCard";
-import ProductListLayout from "@/components/ProductLayout";
+import ProductListLayout from "@/components/product/ProductLayout";
 import { Button } from "@/components/ui/button";
 import { useFavoritesStore } from "@/store/useFavoriteStore";
 

@@ -1,8 +1,8 @@
 "use client";
 
-import ButtonFavorite from "@/components/ButtonFavorite";
-import CarrouselImage from "@/components/CarrouselImage";
-import LoadingCard from "@/components/LoadingCard";
+import ButtonFavorite from "@/components/shared/ButtonFavorite";
+import CarrouselImage from "@/components/product/CarrouselImage";
+import LoadingCard from "@/components/product/LoadingCard";
 import { getProductById } from "@/services/productService";
 import { useFavoritesStore } from "@/store/useFavoriteStore";
 import { Product } from "@/types/Product";

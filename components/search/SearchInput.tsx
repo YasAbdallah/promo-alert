@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 
 type searchInputProps = {
@@ -21,7 +21,7 @@ export default function SearchInput({ searchTerm, setSearchTerm }: searchInputPr
 
     const updateSearchParam = (newQuery: string) => {
         setSearchTerm(newQuery);
-        router.push(`/?search=${encodeURIComponent(newQuery)}`);
+        router.push(`/products?search=${encodeURIComponent(newQuery)}`);
     };
 
     return (

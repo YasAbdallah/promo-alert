@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import FavoriteCount from "@/components/FavoriteCount";
+import Navbar from "@/components/layout/Navbar";
+import FavoriteCount from "@/components/layout/FavoriteCount";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +27,7 @@ export default function RootLayout({
 
   const links = [
     { href: "/", title: "Home" },
+    { href: "/products", title: "Produtos" },
     { href: "/favorites", title: "Favoritos", icon: <FavoriteCount /> },
   ];
 

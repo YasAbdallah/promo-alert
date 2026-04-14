@@ -1,8 +1,8 @@
 import {Card, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import { Product } from "@/types/Product";
 import { useFavoritesStore } from "@/store/useFavoriteStore";
-import ButtonFavorite from "./ButtonFavorite";
-import CarrouselImage from "./CarrouselImage";
+import ButtonFavorite from "@/components/shared/ButtonFavorite";
+import CarrouselImage from "@/components/product/CarrouselImage";
 import Link from "next/link";
 
 type Props = {

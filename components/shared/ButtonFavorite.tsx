@@ -1,5 +1,5 @@
 import {FcLikePlaceholder, FcLike} from 'react-icons/fc';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 
 export default function ButtonFavorite({ favorite, handleFavorite }: { favorite: boolean, handleFavorite: () => void }) {
     return (
