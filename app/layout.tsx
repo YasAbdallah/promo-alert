@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-import FavoriteCount from "@/components/layout/FavoriteCount";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +27,7 @@ export default function RootLayout({
   const links = [
     { href: "/", title: "Home" },
     { href: "/products", title: "Produtos" },
-    { href: "/favorites", title: "Favoritos", icon: <FavoriteCount /> },
+    { href: "/favorites", title: "Favoritos" },
   ];
 
   return (
@@ -36,18 +35,22 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col">
-        <header className="w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <body className="min-h-screen flex flex-col bg-background text-foreground">
 
-          <div className="flex w-full items-center px-4">
-            <Navbar list={links}/>
+        {/* HEADER */}
+        <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="container mx-auto flex items-center px-4 h-14">
+            <Navbar list={links} />
           </div>
-
         </header>
 
+        {/* MAIN */}
         <main className="flex-1">
-          {children}
+          <div className="container mx-auto px-4 py-6">
+            {children}
+          </div>
         </main>
+
       </body>
     </html>
   );
