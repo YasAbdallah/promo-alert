@@ -2,19 +2,38 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useSearchParams, useRouter } from "next/navigation";
 
 type CategoryFilterProps = {
     categories: string[];
-    selectedCategories: string[];
-    onCategoryChange: (category: string) => void;
 }
-
 
 export default function CategorySidebar({
     categories,
-    selectedCategories,
-    onCategoryChange
 }: CategoryFilterProps) {
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const selectedCategories = searchParams.getAll("category");
+
+    const handleCategoryChange = (category: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        const currentCategories = searchParams.getAll("category");
+
+        let newCategories: string[];
+        if (currentCategories.includes(category)) {
+            newCategories = currentCategories.filter(c => c !== category);
+        } else {
+            newCategories = [...currentCategories, category];
+        }
+
+        params.delete("category");
+        newCategories.forEach(c => params.append("category", c));
+
+        router.push(`?${params.toString()}`);
+    }
+
     return (
         <aside className="w-full md:w-64 border-r pr-4">
 
@@ -31,7 +50,7 @@ export default function CategorySidebar({
                         <Checkbox
                             id={category}
                             checked={selectedCategories.includes(category)}
-                            onCheckedChange={() => onCategoryChange(category)}
+                            onCheckedChange={() => handleCategoryChange(category)}
                         />
                         <Label htmlFor={category} className="text-sm cursor-pointer">
                             {category}

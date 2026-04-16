@@ -7,32 +7,27 @@ import { Product } from "@/types/Product";
 import LoadingCard from "@/components/product/LoadingCard";
 import SearchInput from "@/components/search/SearchInput";
 import CategoryFilter from "@/components/search/CategoryFilter";
+import { useSearchParams } from "next/navigation";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const searchParams = useSearchParams();
 
     const filteredProducts = products.filter((product) => {
         const term = searchTerm.toLowerCase();
+        const categoriesFromURL = searchParams.getAll("category");
+        const matchCategory = categoriesFromURL.length > 0 ? categoriesFromURL.includes(product.category) 
+        : true;
 
         return (
-            product.title.toLowerCase().includes(term) ||
-            product.description.toLowerCase().includes(term)
+            (product.title.toLowerCase().includes(term) ||
+            product.description.toLowerCase().includes(term)) &&
+            matchCategory
         );
     });
-
-    const categories = Array.from(new Set(products.map((p) => p.category)));
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
-    const handleCategoryChange = (category: string) => {
-        setSelectedCategories((prev) =>
-            prev.includes(category)
-                ? prev.filter((c) => c !== category)
-                : [...prev, category]
-        );
-    }
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -108,9 +103,7 @@ export default function ProductsPage() {
                 {/* SIDEBAR */}
                 <aside className="w-full md:w-64 shrink-0">
                     <CategoryFilter 
-                        categories={categories}
-                        selectedCategories={selectedCategories}
-                        onCategoryChange={handleCategoryChange}
+                        categories={[...new Set(products.map(p => p.category))]}
                     />
                 </aside>
 
