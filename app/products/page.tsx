@@ -6,19 +6,26 @@ import ProductCard from "@/components/product/ProductCard";
 import { Product } from "@/types/Product";
 import LoadingCard from "@/components/product/LoadingCard";
 import SearchInput from "@/components/search/SearchInput";
+import CategoryFilter from "@/components/search/CategoryFilter";
+import { useSearchParams } from "next/navigation";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const searchParams = useSearchParams();
 
     const filteredProducts = products.filter((product) => {
         const term = searchTerm.toLowerCase();
+        const categoriesFromURL = searchParams.getAll("category");
+        const matchCategory = categoriesFromURL.length > 0 ? categoriesFromURL.includes(product.category) 
+        : true;
 
         return (
-            product.title.toLowerCase().includes(term) ||
-            product.description.toLowerCase().includes(term)
+            (product.title.toLowerCase().includes(term) ||
+            product.description.toLowerCase().includes(term)) &&
+            matchCategory
         );
     });
 
@@ -81,11 +88,7 @@ export default function ProductsPage() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
 
-                <h1 className="text-2xl font-bold">
-                    Produtos
-                </h1>
-
-                <div className="w-full md:w-80">
+                <div className="grid grid-flow-col w-full justify-items-end-safe">
                     <SearchInput
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
@@ -95,11 +98,23 @@ export default function ProductsPage() {
             </div>
 
             {/* Grid de produtos */}
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {(filteredProducts.length > 0 ? filteredProducts : products).map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
+            <section className="flex flex-col md:flex-row gap-6">
+
+                {/* SIDEBAR */}
+                <aside className="w-full md:w-64 shrink-0">
+                    <CategoryFilter 
+                        categories={[...new Set(products.map(p => p.category))]}
+                    />
+                </aside>
+
+                {/* PRODUTOS */}
+                <div className="flex-1 grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {(filteredProducts.length > 0 ? filteredProducts : products).map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
+
+            </section>
         </section>
     );
 }
