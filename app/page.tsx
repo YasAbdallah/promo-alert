@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="w-full py-20 px-4 text-center bg-gradient-to-b from-background to-muted">
+      <section className="w-full py-20 px-4 text-center bg-linear-to-b from-background to-muted">
         <div className="mx-auto max-w-4xl flex flex-col items-center gap-6">
 
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
