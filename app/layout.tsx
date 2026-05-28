@@ -38,7 +38,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-background text-foreground">
 
         {/* HEADER */}
-        <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-backdrop-filter:bg-background/60">
           <div className="container mx-auto flex items-center px-4 h-14">
             <Navbar list={links} />
           </div>
