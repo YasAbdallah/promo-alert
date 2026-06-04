@@ -1,7 +1,7 @@
 "use client";
 
-import ProductCard from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/button";
+import ProductCard from "@/components/product/ProductCard";
 import { useFavoritesStore } from "@/store/useFavoriteStore";
 
 export default function FavoritesPage() {
@@ -32,7 +32,6 @@ export default function FavoritesPage() {
 
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-
                 <div>
                     <h1 className="text-2xl font-bold">
                         Meus Favoritos

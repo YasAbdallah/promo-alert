@@ -40,7 +40,7 @@ export default function CarrouselImage({ product }: PropsImage) {
                 <CarouselPrevious className="left-2 bg-background/80 backdrop-blur hover:bg-background shadow-sm" />
 
                 {/* Botão próximo */}
-                <CarouselNext className="right-2 bg-background/80 backdrop-blur hover:bg-background shadow-sm" />
+                <CarouselNext className="absolute! right-2 bg-background/80 backdrop-blur hover:bg-background shadow-sm" />
 
             </Carousel>
         </div>

@@ -28,7 +28,7 @@ export default function ProductCard({ product }: Props) {
                 className="block cursor-pointer"
             >
                 {/* Imagem */}
-                <CarrouselImage product={product} />
+                <CarrouselImage product={product}/>
 
                 {/* Conteúdo */}
                 <CardHeader className="space-y-2">
