@@ -3,6 +3,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useSearchParams, useRouter } from "next/navigation";
+import CleanFiltersButton from "@/components/search/CleanFiltersButton";
+import { usePathname } from "next/navigation";
 
 type CategoryFilterProps = {
     categories: string[];
@@ -14,6 +16,7 @@ export default function CategorySidebar({
 
     const router = useRouter();
     const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     const selectedCategories = searchParams.getAll("category");
 
@@ -42,6 +45,7 @@ export default function CategorySidebar({
                 <p className="text-sm text-muted-foreground">
                     Filtre os produtos
                 </p>
+                <CleanFiltersButton path={pathname} />
             </div>
 
             <div className="space-y-3">
