@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getProducts } from "@/services/productService";
-import ProductCard from "@/components/product/ProductCard";
 import { Product } from "@/types/Product";
-import LoadingCard from "@/components/product/LoadingCard";
-import SearchInput from "@/components/search/SearchInput";
-import CategoryFilter from "@/components/search/CategoryFilter";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
+import { getProducts } from "@/services/productService";
+import SearchInput from "@/components/search/SearchInput";
+import OrderFilter from "@/components/filter/OrderFilter";
+import ProductCard from "@/components/product/ProductCard";
+import LoadingCard from "@/components/product/LoadingCard";
+import CategoryFilter from "@/components/filter/CategoryFilter";
+import CleanFiltersButton from "@/components/filter/CleanFiltersButton";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -15,16 +19,17 @@ export default function ProductsPage() {
     const [error, setError] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     const filteredProducts = products.filter((product) => {
         const term = searchTerm.toLowerCase();
         const categoriesFromURL = searchParams.getAll("category");
-        const matchCategory = categoriesFromURL.length > 0 ? categoriesFromURL.includes(product.category) 
-        : true;
+        const matchCategory = categoriesFromURL.length > 0 ? categoriesFromURL.includes(product.category)
+            : true;
 
         return (
             (product.title.toLowerCase().includes(term) ||
-            product.description.toLowerCase().includes(term)) &&
+                product.description.toLowerCase().includes(term)) &&
             matchCategory
         );
     });
@@ -102,7 +107,21 @@ export default function ProductsPage() {
 
                 {/* SIDEBAR */}
                 <aside className="w-full md:w-64 shrink-0">
-                    <CategoryFilter 
+                    <div className="mb-6">
+                        <h2 className="text-lg font-semibold">Categorias</h2>
+                        <p className="text-sm text-muted-foreground">
+                            Filtre os produtos
+                        </p>
+                    </div>
+
+                    <CleanFiltersButton path={pathname} />
+                    <Separator orientation="horizontal" className="mt-3 mb-3"/>
+                    <OrderFilter 
+                        productPrices={[...new Set(products.map(product => product.price))]}
+                        productTitle={[...new Set(products.map(product => product.title))]}
+                    />
+                    <Separator orientation="horizontal" className="mt-3 mb-3"/>
+                    <CategoryFilter
                         categories={[...new Set(products.map(p => p.category))]}
                     />
                 </aside>
