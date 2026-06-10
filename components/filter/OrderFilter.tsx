@@ -1,77 +1,69 @@
-import { Checkbox } from "@/components/ui/checkbox";
+"use client";
+
 import { Label } from "@/components/ui/label";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
-
-type OrderFilterProps = {
-    productPrices: Number[],
-    productTitle: String[]
-}
-
-// TODO: Realizar a verificacao do tipo de ordenacao e fazer a ordenacao de acordo com o que foi escolhido.
-//       Ex: Se for price-desc pegar todos os precos de productPrices e ordenar de forma decrescente e mostrar a nova ordenacao.
-
-export default function OrderFilter({productPrices, productTitle} : OrderFilterProps){
+export default function OrderFilter() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const selectedOrder = searchParams.getAll("sorted");
+    const selectedOrders = searchParams.getAll("sorted");
 
-    const handleCategoryChange = (ordenacao: string) => {
+    const handleOrderChange = (key: "priceOrder" | "nameOrder", value: string) => {
         const params = new URLSearchParams(searchParams.toString());
-        const currentOrder = searchParams.getAll("sorted");
 
-        let newOrder: string[];
-        if (currentOrder.includes(ordenacao)) {
-            newOrder = currentOrder.filter(c => c !== ordenacao);
-        } else {
-            newOrder = [...currentOrder, ordenacao];
-        }
-
-        params.delete("order");
-        newOrder.forEach(c => params.append("sorted", c));
-
+        params.set(key, value);
         router.push(`?${params.toString()}`);
-    }
+    };
 
     return (
-        <>
-            <aside className="w-full md:w-64 border-r pr-4">
-                <section className="space-y-3">
-                    <Checkbox
-                        id="price-asc"
-                        checked={selectedOrder.includes("price-asc")}
-                        onCheckedChange={() => handleCategoryChange("price-asc")}
-                    />
-                    <Label htmlFor="price-asc" className="text-sm cursor-pointer">
-                        Menor preco
-                    </Label>
-                    <Checkbox
-                        id="price-desc"
-                        checked={selectedOrder.includes("price-desc")}
-                        onCheckedChange={() => handleCategoryChange("price-desc")}
-                    />
-                    <Label htmlFor="price-desc" className="text-sm cursor-pointer">
-                        Maior preco
-                    </Label>
-                    <Checkbox
-                        id="name-asc"
-                        checked={selectedOrder.includes("name-asc")}
-                        onCheckedChange={() => handleCategoryChange("name-asc")}
-                    />
-                    <Label htmlFor="name-asc" className="text-sm cursor-pointer">
-                        Alfabetica crecente
-                    </Label>
-                    <Checkbox
-                        id="name-desc"
-                        checked={selectedOrder.includes("name-desc")}
-                        onCheckedChange={() => handleCategoryChange("name-desc")}
-                    />
-                    <Label htmlFor="name-desc" className="text-sm cursor-pointer">
-                        Alfabetica decrecente
-                    </Label>
-                </section>
-            </aside>
-        </>
+        <aside className="w-full md:w-64 border-r pr-4 space-y-6">
+
+            <div>
+                <h3 className="font-semibold mb-3">
+                    Preço
+                </h3>
+
+                <div className="space-y-3">
+
+                    <div className="flex items-center gap-3">
+                        <RadioGroup className="w-fit mt-4" value={searchParams.get("priceOrder") ?? ""} onValueChange={value => handleOrderChange("priceOrder", value)}>
+                            <div className="flex item-center gap3">
+                                <RadioGroupItem value="price-asc" id="price-asc" />
+                                <Label htmlFor="price-asc" className="text-sm cursor-pointer ml-2"> Menor preco </Label>
+                            </div>
+                            <div className="flex item-center gap3">
+                                <RadioGroupItem value="price-desc" id="price-desc" />
+                                <Label htmlFor="price-desc" className="text-sm cursor-pointer ml-2" > Maior preco </Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 className="font-semibold mb-3">
+                    Nome
+                </h3>
+
+                <div className="space-y-3">
+
+                    <div className="flex items-center gap-3">
+                        <RadioGroup className="w-fit mt-4" value={searchParams.get("nameOrder") ?? ""} onValueChange={value => handleOrderChange("nameOrder", value)}>
+                            <div className="flex item-center gap3">
+                                <RadioGroupItem value="name-asc" id="name-asc" />
+                                <Label htmlFor="name-asc" className="text-sm cursor-pointer ml-2"> A-Z </Label>
+                            </div>
+                            <div className="flex item-center gap3">
+                                <RadioGroupItem value="name-desc" id="name-desc" />
+                                <Label htmlFor="name-desc" className="text-sm cursor-pointer ml-2"> Z-A </Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
     );
 }

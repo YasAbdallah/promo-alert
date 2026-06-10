@@ -34,6 +34,22 @@ export default function ProductsPage() {
         );
     });
 
+    const fillteredProductsWithSorting = [...filteredProducts].sort((a, b) => {
+        if(searchParams.get("priceOrder") === "price-asc") {
+            return a.price - b.price;
+        }
+        if(searchParams.get("priceOrder") === "price-desc") {
+            return b.price - a.price;
+        }
+        if(searchParams.get("nameOrder") === "name-asc") {
+            return a.title.localeCompare(b.title);
+        }
+        if(searchParams.get("nameOrder") === "name-desc") {
+            return b.title.localeCompare(a.title);
+        }
+        return 0;
+    });
+
     useEffect(() => {
         const loadProducts = async () => {
             try {
@@ -116,10 +132,7 @@ export default function ProductsPage() {
 
                     <CleanFiltersButton path={pathname} />
                     <Separator orientation="horizontal" className="mt-3 mb-3"/>
-                    <OrderFilter 
-                        productPrices={[...new Set(products.map(product => product.price))]}
-                        productTitle={[...new Set(products.map(product => product.title))]}
-                    />
+                    <OrderFilter />
                     <Separator orientation="horizontal" className="mt-3 mb-3"/>
                     <CategoryFilter
                         categories={[...new Set(products.map(p => p.category))]}
@@ -128,9 +141,11 @@ export default function ProductsPage() {
 
                 {/* PRODUTOS */}
                 <div className="flex-1 grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {(filteredProducts.length > 0 ? filteredProducts : products).map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
+                    {
+                        (fillteredProductsWithSorting.length > 0 ? fillteredProductsWithSorting : products).map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))
+                    }
                 </div>
 
             </section>
