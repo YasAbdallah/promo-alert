@@ -4,13 +4,11 @@ import { Label } from "@/components/ui/label";
 import { useRouter, useSearchParams } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
-export default function OrderFilter() {
+export default function SortFilter() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const selectedOrders = searchParams.getAll("sorted");
-
-    const handleOrderChange = (key: "priceOrder" | "nameOrder", value: string) => {
+    const handleOrderChange = (key: "sort", value: string) => {
         const params = new URLSearchParams(searchParams.toString());
 
         params.set(key, value);
@@ -28,13 +26,13 @@ export default function OrderFilter() {
                 <div className="space-y-3">
 
                     <div className="flex items-center gap-3">
-                        <RadioGroup className="w-fit mt-4" value={searchParams.get("priceOrder") ?? ""} onValueChange={value => handleOrderChange("priceOrder", value)}>
+                        <RadioGroup className="w-fit mt-4" value={searchParams.get("sort") ?? ""} onValueChange={value => handleOrderChange("sort", value)}>
                             <div className="flex item-center gap3">
-                                <RadioGroupItem value="price-asc" id="price-asc" />
+                                <RadioGroupItem value="price-asc" id="price-asc" className="peer h-5 w-5 rounded-md border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" />
                                 <Label htmlFor="price-asc" className="text-sm cursor-pointer ml-2"> Menor preco </Label>
                             </div>
                             <div className="flex item-center gap3">
-                                <RadioGroupItem value="price-desc" id="price-desc" />
+                                <RadioGroupItem value="price-desc" id="price-desc" className="peer h-5 w-5 rounded-md border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" />
                                 <Label htmlFor="price-desc" className="text-sm cursor-pointer ml-2" > Maior preco </Label>
                             </div>
                         </RadioGroup>
@@ -50,13 +48,13 @@ export default function OrderFilter() {
                 <div className="space-y-3">
 
                     <div className="flex items-center gap-3">
-                        <RadioGroup className="w-fit mt-4" value={searchParams.get("nameOrder") ?? ""} onValueChange={value => handleOrderChange("nameOrder", value)}>
+                        <RadioGroup className="w-fit mt-4" value={searchParams.get("sort") ?? ""} onValueChange={value => handleOrderChange("sort", value)}>
                             <div className="flex item-center gap3">
-                                <RadioGroupItem value="name-asc" id="name-asc" />
+                                <RadioGroupItem value="name-asc" id="name-asc" className="peer h-5 w-5 rounded-md border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" />
                                 <Label htmlFor="name-asc" className="text-sm cursor-pointer ml-2"> A-Z </Label>
                             </div>
                             <div className="flex item-center gap3">
-                                <RadioGroupItem value="name-desc" id="name-desc" />
+                                <RadioGroupItem value="name-desc" id="name-desc" className="peer h-5 w-5 rounded-md border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" />
                                 <Label htmlFor="name-desc" className="text-sm cursor-pointer ml-2"> Z-A </Label>
                             </div>
                         </RadioGroup>
