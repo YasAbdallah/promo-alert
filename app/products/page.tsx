@@ -6,13 +6,15 @@ import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { getProducts } from "@/services/productService";
-import SearchInput from "@/components/search/SearchInput";
 import SortFilter from "@/components/filter/SortFilter";
+import SearchInput from "@/components/search/SearchInput";
+import { getItemsPerPage } from "@/utils/getItemsPerPage";
 import ProductCard from "@/components/product/ProductCard";
 import LoadingCard from "@/components/product/LoadingCard";
 import CategoryFilter from "@/components/filter/CategoryFilter";
 import { matchesCategory, matchesSearch } from "@/utils/filterProducts";
 import CleanFiltersButton from "@/components/filter/CleanFiltersButton";
+import { PaginationComponent } from "@/components/pagination/PaginationComponent";
 import { sortNameAsc, sortNameDesc, sortPriceAsc, sortPriceDesc } from "@/utils/sortedProduts";
 
 export default function ProductsPage() {
@@ -23,14 +25,14 @@ export default function ProductsPage() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const categoriesFromURL = searchParams.getAll("category");
-
+    const searchSortedParams = searchParams.get("sort");
+    
     const filterProducts = products.filter(product => {
         return matchesSearch(product, searchTerm) &&
         matchesCategory(product, categoriesFromURL);
     });
-
+    
     const filteredProductsWithSorting = [...filterProducts].sort((a, b) => {
-        const searchSortedParams = searchParams.get("sort");
         if(searchSortedParams === "price-asc") return sortPriceAsc(a, b);
         if(searchSortedParams === "price-desc") return sortPriceDesc(a, b);
         if(searchSortedParams === "name-asc") return sortNameAsc(a, b);
@@ -38,6 +40,8 @@ export default function ProductsPage() {
         return 0;
     });
 
+    const getProductsPerPage = getItemsPerPage(filteredProductsWithSorting, Number(searchParams.get("page") || "1"), 10);
+    
     useEffect(() => {
         const loadProducts = async () => {
             try {
@@ -130,13 +134,18 @@ export default function ProductsPage() {
                 {/* PRODUTOS */}
                 <div className="flex-1 grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {
-                        (filteredProductsWithSorting.length > 0 ? filteredProductsWithSorting : products).map((product) => (
+                        getProductsPerPage.map((product) => (
                             <ProductCard key={product.id} product={product} />
                         ))
                     }
                 </div>
-
             </section>
+            <PaginationComponent 
+                qntItemsPerPage={10} 
+                totalItems={filteredProductsWithSorting.length} 
+                currentPage={Number(searchParams.get("page") || "1")}
+                searchParams={searchParams} 
+            />
         </section>
     );
 }

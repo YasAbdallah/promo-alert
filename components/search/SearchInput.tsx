@@ -4,6 +4,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Search } from "lucide-react";
+import {createPageURL} from "@/utils/createPageURL";
+
 
 type SearchInputProps = {
     searchTerm: string;
@@ -22,7 +24,9 @@ export default function SearchInput({
     }, [searchParam, setSearchTerm]);
 
     const updateSearchParam = (newQuery: string) => {
-        router.push(`/products?search=${encodeURIComponent(newQuery)}`);
+        const params = new URLSearchParams();
+        params.set("search", newQuery);
+        router.push(createPageURL(1, params));
     };
 
     return (

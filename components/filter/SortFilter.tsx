@@ -2,6 +2,8 @@
 
 import { Label } from "@/components/ui/label";
 import { useRouter, useSearchParams } from "next/navigation";
+import {createPageURL} from "@/utils/createPageURL";
+
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 export default function SortFilter() {
@@ -12,7 +14,7 @@ export default function SortFilter() {
         const params = new URLSearchParams(searchParams.toString());
 
         params.set(key, value);
-        router.push(`?${params.toString()}`);
+        router.push(createPageURL(1, params));
     };
 
     return (
