@@ -16,10 +16,12 @@ import { matchesCategory, matchesSearch } from "@/utils/filterProducts";
 import CleanFiltersButton from "@/components/filter/CleanFiltersButton";
 import { PaginationComponent } from "@/components/pagination/PaginationComponent";
 import { sortNameAsc, sortNameDesc, sortPriceAsc, sortPriceDesc } from "@/utils/sortedProduts";
+import { ChipsFilter } from "@/components/filter/ChipsFilter";
+import { createChips } from "@/utils/createChips";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);''
     const [error, setError] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const searchParams = useSearchParams();
@@ -41,7 +43,8 @@ export default function ProductsPage() {
     });
 
     const getProductsPerPage = getItemsPerPage(filteredProductsWithSorting, Number(searchParams.get("page") || "1"), 10);
-    
+    const chips = createChips(searchParams.toString());
+
     useEffect(() => {
         const loadProducts = async () => {
             try {
@@ -100,6 +103,12 @@ export default function ProductsPage() {
 
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <div className="grid grid-flow-col w-full justify-items-start-safe">
+                    {(chips.length > 0) ? 
+                        chips.map((chip, index) => (
+                            <ChipsFilter key={index} label={chip} onRemove={() => {}} />
+                        )) : null}
+                </div>
 
                 <div className="grid grid-flow-col w-full justify-items-end-safe">
                     <SearchInput
