@@ -2,6 +2,8 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import {createPageURL} from "@/utils/createPageURL";
+
 import { useSearchParams, useRouter } from "next/navigation";
 
 type CategoryFilterProps = {
@@ -31,7 +33,7 @@ export default function CategorySidebar({
         params.delete("category");
         newCategories.forEach(c => params.append("category", c));
 
-        router.push(`?${params.toString()}`);
+        router.push(createPageURL(1, params));
     }
 
     return (

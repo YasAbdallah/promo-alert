@@ -6,33 +6,44 @@ import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { getProducts } from "@/services/productService";
+import SortFilter from "@/components/filter/SortFilter";
 import SearchInput from "@/components/search/SearchInput";
-import OrderFilter from "@/components/filter/OrderFilter";
+import { getItemsPerPage } from "@/utils/getItemsPerPage";
 import ProductCard from "@/components/product/ProductCard";
 import LoadingCard from "@/components/product/LoadingCard";
 import CategoryFilter from "@/components/filter/CategoryFilter";
+import { matchesCategory, matchesSearch } from "@/utils/filterProducts";
 import CleanFiltersButton from "@/components/filter/CleanFiltersButton";
+import { PaginationComponent } from "@/components/pagination/PaginationComponent";
+import { sortNameAsc, sortNameDesc, sortPriceAsc, sortPriceDesc } from "@/utils/sortedProduts";
+import { ChipsFilter } from "@/components/filter/ChipsFilter";
+import { createChips } from "@/utils/createChips";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);''
     const [error, setError] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const searchParams = useSearchParams();
     const pathname = usePathname();
-
-    const filteredProducts = products.filter((product) => {
-        const term = searchTerm.toLowerCase();
-        const categoriesFromURL = searchParams.getAll("category");
-        const matchCategory = categoriesFromURL.length > 0 ? categoriesFromURL.includes(product.category)
-            : true;
-
-        return (
-            (product.title.toLowerCase().includes(term) ||
-                product.description.toLowerCase().includes(term)) &&
-            matchCategory
-        );
+    const categoriesFromURL = searchParams.getAll("category");
+    const searchSortedParams = searchParams.get("sort");
+    
+    const filterProducts = products.filter(product => {
+        return matchesSearch(product, searchTerm) &&
+        matchesCategory(product, categoriesFromURL);
     });
+    
+    const filteredProductsWithSorting = [...filterProducts].sort((a, b) => {
+        if(searchSortedParams === "price-asc") return sortPriceAsc(a, b);
+        if(searchSortedParams === "price-desc") return sortPriceDesc(a, b);
+        if(searchSortedParams === "name-asc") return sortNameAsc(a, b);
+        if(searchSortedParams === "name-desc") return sortNameDesc(a, b);
+        return 0;
+    });
+
+    const getProductsPerPage = getItemsPerPage(filteredProductsWithSorting, Number(searchParams.get("page") || "1"), 10);
+    const chips = createChips(searchParams.toString());
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -92,6 +103,12 @@ export default function ProductsPage() {
 
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <div className="grid grid-flow-col w-full justify-items-start-safe">
+                    {(chips.length > 0) ? 
+                        chips.map((chip, index) => (
+                            <ChipsFilter key={index} label={chip} onRemove={() => {}} />
+                        )) : null}
+                </div>
 
                 <div className="grid grid-flow-col w-full justify-items-end-safe">
                     <SearchInput
@@ -116,10 +133,7 @@ export default function ProductsPage() {
 
                     <CleanFiltersButton path={pathname} />
                     <Separator orientation="horizontal" className="mt-3 mb-3"/>
-                    <OrderFilter 
-                        productPrices={[...new Set(products.map(product => product.price))]}
-                        productTitle={[...new Set(products.map(product => product.title))]}
-                    />
+                    <SortFilter />
                     <Separator orientation="horizontal" className="mt-3 mb-3"/>
                     <CategoryFilter
                         categories={[...new Set(products.map(p => p.category))]}
@@ -128,12 +142,19 @@ export default function ProductsPage() {
 
                 {/* PRODUTOS */}
                 <div className="flex-1 grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {(filteredProducts.length > 0 ? filteredProducts : products).map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
+                    {
+                        getProductsPerPage.map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))
+                    }
                 </div>
-
             </section>
+            <PaginationComponent 
+                qntItemsPerPage={10} 
+                totalItems={filteredProductsWithSorting.length} 
+                currentPage={Number(searchParams.get("page") || "1")}
+                searchParams={searchParams} 
+            />
         </section>
     );
 }
